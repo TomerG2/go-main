@@ -24,7 +24,7 @@ func QueryURLsPaginated(urls []string) {
 		fmt.Printf("Processing query [num=%d] [query=%s]\n", num, url)
 		totalCount := queryUrlPaginated(url, 1, conf.DefaultPerPage)
 		for i := 2; i < (totalCount / conf.DefaultPerPage); i++ {
-			queryUrlPaginated(url, i, conf.DefaultPerPage)
+			go queryUrlPaginated(url, i, conf.DefaultPerPage)
 		}
 	}
 }
