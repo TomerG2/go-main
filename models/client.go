@@ -20,8 +20,15 @@ func QueryURLs(urls []string) {
 func QueryURLsPaginated(urls []string) {
 	for num, url := range urls {
 		fmt.Printf("Processing query [num=%d] [query=%s]\n", num, url)
-		queryUrl(url)
+		totalCount := queryUrlPaginated(url, 1, conf.DefaultPerPage)
+		for i := 2; i < (totalCount / conf.DefaultPerPage); i++ {
+			queryUrlPaginated(url, i, conf.DefaultPerPage)
+		}
 	}
+}
+
+func queryUrlPaginated(url string, page int, perPage int) (totalCount int) {
+	return queryUrl(url)
 }
 
 func queryUrl(url string) (totalCount int) {
