@@ -30,19 +30,18 @@ func QueryURLsPaginated(urls []string) {
 }
 
 func queryUrlPaginated(url string, page int, perPage int) (totalCount int) {
-	return queryUrl(url)
+	fmt.Printf("Query URL using pagination [page=%d] [per_page=%d]", page, perPage)
+	paginatedUrl := AddPagination(url, page, perPage)
+	return queryUrl(paginatedUrl)
 }
 
 func AddPagination(url string, page int, perPage int) string {
 	parsedUrl, _ := url2.Parse(url)
-	// Retrieve existing query parameters
 	q := parsedUrl.Query()
 
-	// Add or set additional query parameters
 	q.Set("page", strconv.Itoa(page))
 	q.Set("per_page", strconv.Itoa(perPage))
 
-	// Encode and update the URL's RawQuery
 	parsedUrl.RawQuery = q.Encode()
 
 	fmt.Println(parsedUrl.String())
@@ -75,6 +74,6 @@ func queryUrl(url string) (totalCount int) {
 	if err := json.Unmarshal([]byte(string(body)), &searchResponse); err != nil {
 		log.Fatalf("Error parsing JSON: %v", err)
 	}
-	fmt.Println("Total Count", searchResponse.TotalCount)
+	//fmt.Println("Total Count", searchResponse.TotalCount)
 	return searchResponse.TotalCount
 }
