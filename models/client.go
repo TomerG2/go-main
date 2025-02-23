@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	url2 "net/url"
+	"strconv"
 	"tomerg2/go-main/conf"
 	"tomerg2/go-main/dtos"
 )
@@ -29,6 +31,22 @@ func QueryURLsPaginated(urls []string) {
 
 func queryUrlPaginated(url string, page int, perPage int) (totalCount int) {
 	return queryUrl(url)
+}
+
+func AddPagination(url string, page int, perPage int) string {
+	parsedUrl, _ := url2.Parse(url)
+	// Retrieve existing query parameters
+	q := parsedUrl.Query()
+
+	// Add or set additional query parameters
+	q.Set("page", strconv.Itoa(page))
+	q.Set("per_page", strconv.Itoa(perPage))
+
+	// Encode and update the URL's RawQuery
+	parsedUrl.RawQuery = q.Encode()
+
+	fmt.Println(parsedUrl.String())
+	return parsedUrl.String()
 }
 
 func queryUrl(url string) (totalCount int) {
